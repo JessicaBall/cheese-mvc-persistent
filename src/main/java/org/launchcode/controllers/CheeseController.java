@@ -40,13 +40,11 @@ public class CheeseController {
 
     @RequestMapping(value = "add", method = RequestMethod.GET)
     public String displayAddCheeseForm(Model model) {
+
         model.addAttribute("title", "Add Cheese");
         model.addAttribute(new Cheese());
-        //previously was:
-       // model.addAttribute("cheeseTypes", CheeseType.values());
-
-        //displayAddCheeseForm section from part 2. Is this right? Capitalize CatagoryDao and import?:
         model.addAttribute("categories", categoryDao.findAll());
+
         return "cheese/add";
     }
 
