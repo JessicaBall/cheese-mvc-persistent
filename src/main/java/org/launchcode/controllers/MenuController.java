@@ -1,8 +1,10 @@
 package org.launchcode.controllers;
 
+import org.launchcode.models.Cheese;
 import org.launchcode.models.Menu;
 import org.launchcode.models.data.CheeseDao;
 import org.launchcode.models.data.MenuDao;
+import org.launchcode.models.forms.AddMenuItemForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
+
 
 /**
  * Created by jessi on 4/25/2017.
@@ -78,8 +81,34 @@ public class MenuController {
         Menu menu = menuDao.findOne(id);
         model.addAttribute("menu", menu);
 
+        Iterable<Cheese> cheeses = cheeseDao.findAll();
+
+        AddMenuItemForm addMenuItemForm = new AddMenuItemForm(menu, cheeses);
+        model.addAttribute("form", addMenuItemForm);
+        model.addAttribute("title", "Add item to menu:" + menu.getName());
+
         return "menu/add-item/" + id;
 
+    }
+
+    @RequestMapping (value = "add-item{menuId}", method = RequestMethod.POST)
+    public String addItem(Model model,
+                          @ModelAttribute @Valid AddMenuItemForm addMenuItemForm, Errors errors, int id){
+
+        if (errors.hasErrors()) {
+            model.addAttribute("form", addMenuItemForm);
+
+            return "menu/add-item";
+        }
+
+
+        Menu menu = menuDao.findOne(id);
+        Iterable<Cheese> cheeses = cheeseDao.findAll();
+
+        Menu theMenu = menuDao.save(theMenu);
+
+
+        return "redirect:view/" + menu.getId();
     }
 
 }

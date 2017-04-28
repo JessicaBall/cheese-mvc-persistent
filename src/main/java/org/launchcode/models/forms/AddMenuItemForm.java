@@ -20,7 +20,7 @@ public class AddMenuItemForm {
     @NotNull
     private int cheeseId;
 
-    public AddMenuItemForm(String menu, String cheeses) {
+    public AddMenuItemForm(Menu menu, Iterable<Cheese> cheeses) {
         this.menu = menu;
         this.cheeses = cheeses;
     }
